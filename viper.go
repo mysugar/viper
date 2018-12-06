@@ -223,6 +223,23 @@ func New() *Viper {
 	return v
 }
 
+func NewFsViper(fs afero.Fs) *Viper {
+	v := new(Viper)
+	v.keyDelim = "."
+	v.configName = "config"
+	v.fs = fs
+	v.config = make(map[string]interface{})
+	v.override = make(map[string]interface{})
+	v.defaults = make(map[string]interface{})
+	v.kvstore = make(map[string]interface{})
+	v.pflags = make(map[string]FlagValue)
+	v.env = make(map[string]string)
+	v.aliases = make(map[string]string)
+	v.typeByDefValue = false
+
+	return v
+}
+
 // Intended for testing, will reset all to default settings.
 // In the public interface for the viper package so applications
 // can use it in their testing as well.
