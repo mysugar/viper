@@ -673,6 +673,16 @@ func GetViper() *Viper {
 	return v
 }
 
+
+//DELETE can remove
+func Delete(key string){  v.Delete(key) }
+
+func (v *Viper) Delete(key string) {
+	lcaseKey := strings.ToLower(key)
+	path := strings.Split(lcaseKey, v.keyDelim)
+	deepDelete(v.override, path[0:len(path)-1],key)
+}
+
 // Get can retrieve any value given the key to use.
 // Get is case-insensitive for a key.
 // Get has the behavior of returning the value associated with the first
@@ -783,6 +793,14 @@ func (v *Viper) GetTime(key string) time.Time {
 func GetDuration(key string) time.Duration { return v.GetDuration(key) }
 func (v *Viper) GetDuration(key string) time.Duration {
 	return cast.ToDuration(v.Get(key))
+}
+
+
+// GetYaml returns the value associated with the key as a yaml obj.
+func GetYamlObj(key string) error { return v.GetYamlObj(key) }
+func (v *Viper) GetYamlObj(key string) error {
+	//return cast.ToDuration(v.Get(key))
+	return nil
 }
 
 // GetStringSlice returns the value associated with the key as a slice of strings.
@@ -1350,6 +1368,7 @@ func (v *Viper) writeConfig(filename string, force bool) error {
 		}
 	}
 	f, err := v.fs.OpenFile(filename, flags, os.FileMode(0644))
+    defer f.Close()
 	if err != nil {
 		return err
 	}
