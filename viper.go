@@ -680,7 +680,9 @@ func Delete(key string){  v.Delete(key) }
 func (v *Viper) Delete(key string) {
 	lcaseKey := strings.ToLower(key)
 	path := strings.Split(lcaseKey, v.keyDelim)
-	deepDelete(v.override, path[0:len(path)-1],key)
+	
+	deepDelete(v.config, path[0:len(path)])
+	fmt.Println(path)
 }
 
 // Get can retrieve any value given the key to use.

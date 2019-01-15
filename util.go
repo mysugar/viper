@@ -221,26 +221,18 @@ func deepSearch(m map[string]interface{}, path []string) map[string]interface{} 
 }
 
 
-func deepDelete(m map[string]interface{}, path []string,key string)  {
-	for _, k := range path {
+func deepDelete(m map[string]interface{}, path []string)  {
+	lastIndex := len(path)-1
+	for index, k := range path {
 		m2, ok := m[k]
 		if !ok {
-			// intermediate key does not exist
-			// => create it and continue from there
-			m3 := make(map[string]interface{})
-			m[k] = m3
-			m = m3
-			continue
+			return
 		}
-		m3, ok := m2.(map[string]interface{})
-		if !ok {
-			// intermediate key is a value
-			// => replace with a new map
-			m3 = make(map[string]interface{})
-			m[k] = m3
+		if index==lastIndex {
+			delete(m,k)
+			return
+		}else {
+			m=m2.(map[string]interface{})
 		}
-		// continue search from here
-		m = m3
 	}
-	delete(m,key)
 }
